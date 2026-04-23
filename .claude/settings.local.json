@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx expo *)",
+      "WebSearch",
+      "WebFetch(domain:www.ipbr.org)",
+      "WebFetch(domain:www.stekaudit.ru)",
+      "Bash(node -e ' *)",
+      "Bash(node -e \"const l = require\\('./src/data/levels.js'\\); console.log\\('Levels loaded:', l.LEVELS.length\\); l.LEVELS.forEach\\(lv => console.log\\('Level', lv.id, '— gate questions:', lv.examGate.questions.length\\)\\);\")"
+    ]
+  }
+}
