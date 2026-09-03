@@ -32,4 +32,4 @@ Notable changes follow Keep a Changelog and Semantic Versioning.
 - Initial Finance Academy Expo application and five-level finance curriculum.
 
 [1.1.0]: https://github.com/BITS4/Finance-Academy-/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/BITS4/Finance-Academy-/tree/v1.0.0
+[1.0.0]: https://github.com/BITS4/Finance-Academy-/commit/3a258ee

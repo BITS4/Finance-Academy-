@@ -66,7 +66,7 @@ Useful focused commands:
 | `npm run build`      | Production Expo web export to `dist/`  |
 | `npm run audit`      | Block high/critical npm advisories     |
 
-Current local baseline: 66 tests; 99% statements, 95% branches, 96% functions, and 99% lines across the testable domain, client-service, and server layers. CI applies the committed thresholds rather than relying on this documented snapshot.
+Current clean-clone baseline: 74 tests; 99% statements, 95% branches, 96% functions, and 99% lines across the testable domain, client-service, and server layers. CI applies the committed thresholds rather than relying on this documented snapshot.
 
 ## Docker
 
