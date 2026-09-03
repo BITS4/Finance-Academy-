@@ -1,38 +1,20 @@
 {
   "expo": {
-    "name": "Академия Финансов",
+    "name": "Finance Academy",
     "slug": "finance-academy",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#07091A"
-    },
     "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "com.yourcompany.financeacademy"
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bits4.financeacademy"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#07091A"
-      },
-      "package": "com.yourcompany.financeacademy"
+      "package": "com.bits4.financeacademy",
+      "predictiveBackGestureEnabled": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      [
-        "expo-font",
-        {
-          "fonts": []
-        }
-      ],
-      "expo-web-browser"
-    ]
+      "bundler": "metro"
+    }
   }
 }

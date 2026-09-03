@@ -1,0 +1,7 @@
+{
+  "project_type": "mobile_application",
+  "framework": "expo_react_native",
+  "architecture": "mobile_client_with_backend_api",
+  "primary_language": "typescript_javascript",
+  "infrastructure_as_code": false
+}

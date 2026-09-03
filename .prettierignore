@@ -1,0 +1,8 @@
+node_modules
+.expo
+dist
+coverage
+.artifacts
+package-lock.json
+src/data/*.js
+src/data/levels/*.js
