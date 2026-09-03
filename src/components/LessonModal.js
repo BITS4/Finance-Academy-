@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import {
-  View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal, Dimensions,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  Dimensions,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { T } from '../theme';
@@ -13,12 +19,36 @@ export default function LessonModal({ lesson, course, isDone, onClose, onDone })
   // Simple markdown renderer
   function renderContent(text) {
     return text.split('\n').map((line, i) => {
-      if (line.startsWith('## ')) return <Text key={i} style={s.h2}>{line.slice(3)}</Text>;
-      if (line.startsWith('**') && line.endsWith('**')) return <Text key={i} style={s.bold}>{line.slice(2, -2)}</Text>;
-      if (line.startsWith('• ')) return <Text key={i} style={s.bullet}>• {line.slice(2)}</Text>;
-      if (line.startsWith('− ') || line.startsWith('= ')) return <Text key={i} style={s.formula}>{line}</Text>;
+      if (line.startsWith('## '))
+        return (
+          <Text key={i} style={s.h2}>
+            {line.slice(3)}
+          </Text>
+        );
+      if (line.startsWith('**') && line.endsWith('**'))
+        return (
+          <Text key={i} style={s.bold}>
+            {line.slice(2, -2)}
+          </Text>
+        );
+      if (line.startsWith('• '))
+        return (
+          <Text key={i} style={s.bullet}>
+            • {line.slice(2)}
+          </Text>
+        );
+      if (line.startsWith('− ') || line.startsWith('= '))
+        return (
+          <Text key={i} style={s.formula}>
+            {line}
+          </Text>
+        );
       if (line.trim() === '') return <View key={i} style={{ height: 8 }} />;
-      return <Text key={i} style={s.para}>{line}</Text>;
+      return (
+        <Text key={i} style={s.para}>
+          {line}
+        </Text>
+      );
     });
   }
 
@@ -64,9 +94,7 @@ export default function LessonModal({ lesson, course, isDone, onClose, onDone })
           )}
 
           {/* Content */}
-          <View style={s.lessonContent}>
-            {renderContent(lesson.content)}
-          </View>
+          <View style={s.lessonContent}>{renderContent(lesson.content)}</View>
 
           {/* Done button */}
           <TouchableOpacity
@@ -87,9 +115,14 @@ export default function LessonModal({ lesson, course, isDone, onClose, onDone })
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: T.bg },
   header: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingTop: 52, paddingHorizontal: 20, paddingBottom: 16,
-    borderBottomWidth: 1, borderColor: T.border,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 52,
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderColor: T.border,
   },
   backBtn: {},
   backText: { color: T.gold, fontSize: 17 },
@@ -98,16 +131,22 @@ const s = StyleSheet.create({
   content: { padding: 20 },
   title: { color: T.text, fontSize: 22, fontWeight: '700', marginBottom: 20, lineHeight: 30 },
   videoBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 10,
-    padding: 14, borderRadius: 12,
-    borderWidth: 1, backgroundColor: T.surface,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    padding: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    backgroundColor: T.surface,
     marginBottom: 16,
   },
   videoBtnIcon: { fontSize: 20 },
   videoBtnText: { fontSize: 14, fontWeight: '600' },
   videoWrap: {
-    borderRadius: 12, overflow: 'hidden',
-    marginBottom: 20, height: (width - 40) * 9 / 16,
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 20,
+    height: ((width - 40) * 9) / 16,
   },
   webview: { flex: 1 },
   lessonContent: { marginBottom: 24 },
@@ -115,15 +154,20 @@ const s = StyleSheet.create({
   bold: { color: T.text, fontSize: 14, fontWeight: '700', marginBottom: 8 },
   bullet: { color: T.sub, fontSize: 14, lineHeight: 24, marginBottom: 4, marginLeft: 8 },
   formula: {
-    color: T.text, fontSize: 13,
+    color: T.text,
+    fontSize: 13,
     fontFamily: 'monospace',
-    backgroundColor: T.card, padding: 10,
-    borderRadius: 8, marginBottom: 4,
+    backgroundColor: T.card,
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 4,
   },
   para: { color: T.sub, fontSize: 14, lineHeight: 24, marginBottom: 4 },
   doneBtn: {
-    backgroundColor: T.gold, borderRadius: 14,
-    padding: 16, alignItems: 'center',
+    backgroundColor: T.gold,
+    borderRadius: 14,
+    padding: 16,
+    alignItems: 'center',
   },
   doneBtnDone: { backgroundColor: T.surface, borderWidth: 1, borderColor: T.border },
   doneBtnText: { color: '#000', fontSize: 15, fontWeight: '700' },

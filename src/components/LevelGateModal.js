@@ -1,7 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import {
-  View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { T } from '../theme';
 
 function shuffleArray(arr) {
@@ -47,12 +45,12 @@ export default function LevelGateModal({ level, onClose, onPass }) {
     else setPhase('result');
   }
 
-  const correctCount = answers.filter(a => a.isCorrect).length;
+  const correctCount = answers.filter((a) => a.isCorrect).length;
   const score = totalQ ? Math.round((correctCount / totalQ) * 100) : 0;
   const passed = score >= gate.passingScore;
 
   function restart() {
-    setRetryCount(c => c + 1);
+    setRetryCount((c) => c + 1);
     setPhase('quiz');
     setCur(0);
     setSelected(null);
@@ -65,9 +63,13 @@ export default function LevelGateModal({ level, onClose, onPass }) {
       <Modal visible animationType="slide" onRequestClose={onClose}>
         <ScrollView style={s.container} contentContainerStyle={s.content}>
           {/* Level badge */}
-          <View style={[s.levelBadge, { backgroundColor: level.colorBg, borderColor: level.color }]}>
+          <View
+            style={[s.levelBadge, { backgroundColor: level.colorBg, borderColor: level.color }]}
+          >
             <Text style={s.levelBadgeIcon}>{level.icon}</Text>
-            <Text style={[s.levelBadgeText, { color: level.color }]}>Уровень {level.num} · {level.title}</Text>
+            <Text style={[s.levelBadgeText, { color: level.color }]}>
+              Уровень {level.num} · {level.title}
+            </Text>
           </View>
 
           <Text style={s.gateTitle}>{gate.title}</Text>
@@ -86,16 +88,26 @@ export default function LevelGateModal({ level, onClose, onPass }) {
             <Text style={s.rulesTitle}>📋 Условия перехода:</Text>
             <Text style={s.rulesItem}>✅ Завершены все уроки уровня</Text>
             <Text style={s.rulesItem}>✅ Пройден тренажёр интервью</Text>
-            <Text style={s.rulesItem}>🎯 Набери минимум {gate.passingScore}% в финальном тесте</Text>
-            <Text style={s.rulesItem}>🔓 Успешное прохождение разблокирует Уровень {level.id + 1}</Text>
+            <Text style={s.rulesItem}>
+              🎯 Набери минимум {gate.passingScore}% в финальном тесте
+            </Text>
+            <Text style={s.rulesItem}>
+              🔓 Успешное прохождение разблокирует Уровень {level.id + 1}
+            </Text>
           </View>
 
           {/* Target exam context */}
           <View style={[s.examContext, { borderColor: level.color + '55' }]}>
-            <Text style={[s.examContextBadge, { color: level.color }]}>🎓 Этот тест ≈ сложности {level.targetExam}</Text>
+            <Text style={[s.examContextBadge, { color: level.color }]}>
+              🎓 Этот тест ≈ сложности {level.targetExam}
+            </Text>
           </View>
 
-          <TouchableOpacity style={[s.startBtn, { backgroundColor: level.color }]} onPress={() => setPhase('quiz')} activeOpacity={0.8}>
+          <TouchableOpacity
+            style={[s.startBtn, { backgroundColor: level.color }]}
+            onPress={() => setPhase('quiz')}
+            activeOpacity={0.8}
+          >
             <Text style={s.startBtnText}>🚀 Начать финальный тест</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.cancelBtn} onPress={onClose} activeOpacity={0.7}>
@@ -117,7 +129,9 @@ export default function LevelGateModal({ level, onClose, onPass }) {
               {score >= 95 ? '🏆' : score >= gate.passingScore ? '✅' : '📚'}
             </Text>
             <Text style={[s.scorePct, { color: passed ? T.green : T.red }]}>{score}%</Text>
-            <Text style={s.scoreDetail}>{correctCount} из {totalQ} верных</Text>
+            <Text style={s.scoreDetail}>
+              {correctCount} из {totalQ} верных
+            </Text>
             <Text style={[s.scoreVerdict, { color: passed ? T.green : T.red }]}>
               {passed
                 ? `✓ Уровень ${level.num} пройден!`
@@ -173,7 +187,11 @@ export default function LevelGateModal({ level, onClose, onPass }) {
               </Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity style={[s.startBtn, { backgroundColor: level.color }]} onPress={restart} activeOpacity={0.8}>
+            <TouchableOpacity
+              style={[s.startBtn, { backgroundColor: level.color }]}
+              onPress={restart}
+              activeOpacity={0.8}
+            >
               <Text style={s.startBtnText}>🔄 Пересдать тест</Text>
             </TouchableOpacity>
           )}
@@ -195,13 +213,19 @@ export default function LevelGateModal({ level, onClose, onPass }) {
       <View style={s.container}>
         {/* Header */}
         <View style={[s.quizHeader, { borderBottomColor: level.color + '44' }]}>
-          <Text style={[s.quizTitle, { color: level.color }]}>{level.icon} Финальный тест · Уровень {level.num}</Text>
-          <Text style={s.quizCount}>{cur + 1}/{totalQ}</Text>
+          <Text style={[s.quizTitle, { color: level.color }]}>
+            {level.icon} Финальный тест · Уровень {level.num}
+          </Text>
+          <Text style={s.quizCount}>
+            {cur + 1}/{totalQ}
+          </Text>
         </View>
 
         {/* Progress */}
         <View style={s.progressBar}>
-          <View style={[s.progressFill, { width: `${progressPct}%`, backgroundColor: level.color }]} />
+          <View
+            style={[s.progressFill, { width: `${progressPct}%`, backgroundColor: level.color }]}
+          />
         </View>
 
         <ScrollView contentContainerStyle={s.quizContent} showsVerticalScrollIndicator={false}>
@@ -212,23 +236,32 @@ export default function LevelGateModal({ level, onClose, onPass }) {
               let optStyle = s.option;
               let textStyle = s.optText;
               if (confirmed) {
-                if (i === q.correct) { optStyle = [s.option, s.optCorrect]; textStyle = [s.optText, { color: T.green }]; }
-                else if (i === selected) { optStyle = [s.option, s.optWrong]; textStyle = [s.optText, { color: T.red }]; }
+                if (i === q.correct) {
+                  optStyle = [s.option, s.optCorrect];
+                  textStyle = [s.optText, { color: T.green }];
+                } else if (i === selected) {
+                  optStyle = [s.option, s.optWrong];
+                  textStyle = [s.optText, { color: T.red }];
+                }
               } else if (selected === i) {
                 optStyle = [s.option, { borderColor: level.color, backgroundColor: level.colorBg }];
               }
               return (
                 <TouchableOpacity
-                  key={i} style={optStyle}
+                  key={i}
+                  style={optStyle}
                   onPress={() => !confirmed && setSelected(i)}
-                  disabled={confirmed} activeOpacity={0.75}
+                  disabled={confirmed}
+                  activeOpacity={0.75}
                 >
-                  <View style={[
-                    s.optLetter,
-                    confirmed && i === q.correct && { backgroundColor: T.green },
-                    confirmed && i === selected && i !== q.correct && { backgroundColor: T.red },
-                    !confirmed && selected === i && { backgroundColor: level.color },
-                  ]}>
+                  <View
+                    style={[
+                      s.optLetter,
+                      confirmed && i === q.correct && { backgroundColor: T.green },
+                      confirmed && i === selected && i !== q.correct && { backgroundColor: T.red },
+                      !confirmed && selected === i && { backgroundColor: level.color },
+                    ]}
+                  >
                     <Text style={s.optLetterText}>{['А', 'Б', 'В', 'Г'][i]}</Text>
                   </View>
                   <Text style={textStyle}>{opt}</Text>
@@ -240,14 +273,18 @@ export default function LevelGateModal({ level, onClose, onPass }) {
           {confirmed && (
             <View style={[s.feedback, isCorrect ? s.fbOk : s.fbFail]}>
               <Text style={[s.fbText, { color: isCorrect ? T.green : T.red }]}>
-                {isCorrect ? '✅ ' : '❌ '}{q.explanation}
+                {isCorrect ? '✅ ' : '❌ '}
+                {q.explanation}
               </Text>
             </View>
           )}
 
           {!confirmed ? (
             <TouchableOpacity
-              style={[s.actionBtn, { backgroundColor: level.color, opacity: selected === null ? 0.4 : 1 }]}
+              style={[
+                s.actionBtn,
+                { backgroundColor: level.color, opacity: selected === null ? 0.4 : 1 },
+              ]}
               onPress={confirmAnswer}
               disabled={selected === null}
               activeOpacity={0.8}
@@ -287,9 +324,15 @@ const s = StyleSheet.create({
   content: { padding: 20, paddingTop: 56 },
 
   levelBadge: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    paddingHorizontal: 12, paddingVertical: 7, borderRadius: 10, borderWidth: 1,
-    alignSelf: 'flex-start', marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+    borderWidth: 1,
+    alignSelf: 'flex-start',
+    marginBottom: 16,
   },
   levelBadgeIcon: { fontSize: 16 },
   levelBadgeText: { fontSize: 12, fontWeight: '700' },
@@ -297,16 +340,37 @@ const s = StyleSheet.create({
   gateDesc: { color: T.sub, fontSize: 14, lineHeight: 21, marginBottom: 16 },
 
   statsRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
-  statCard: { flex: 1, backgroundColor: T.surface, borderRadius: 12, padding: 12, alignItems: 'center', borderWidth: 1, borderColor: T.border },
+  statCard: {
+    flex: 1,
+    backgroundColor: T.surface,
+    borderRadius: 12,
+    padding: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: T.border,
+  },
   statIcon: { fontSize: 20, marginBottom: 4 },
   statValue: { color: T.text, fontSize: 14, fontWeight: '800', marginBottom: 2 },
   statLabel: { color: T.sub, fontSize: 10, textAlign: 'center' },
 
-  rulesCard: { backgroundColor: T.surface, borderRadius: 14, padding: 16, marginBottom: 14, borderWidth: 1, borderColor: T.border },
+  rulesCard: {
+    backgroundColor: T.surface,
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: T.border,
+  },
   rulesTitle: { color: T.text, fontSize: 14, fontWeight: '700', marginBottom: 10 },
   rulesItem: { color: T.sub, fontSize: 13, marginBottom: 6, lineHeight: 19 },
 
-  examContext: { borderRadius: 10, padding: 10, borderWidth: 1, marginBottom: 20, alignSelf: 'flex-start' },
+  examContext: {
+    borderRadius: 10,
+    padding: 10,
+    borderWidth: 1,
+    marginBottom: 20,
+    alignSelf: 'flex-start',
+  },
   examContextBadge: { fontSize: 12, fontWeight: '600' },
 
   startBtn: { borderRadius: 14, padding: 16, alignItems: 'center', marginBottom: 12 },
@@ -322,8 +386,12 @@ const s = StyleSheet.create({
   scoreVerdict: { fontSize: 17, fontWeight: '700', marginTop: 8 },
 
   unlockCard: {
-    backgroundColor: T.card, borderRadius: 16, padding: 20,
-    alignItems: 'center', marginBottom: 16, borderWidth: 2,
+    backgroundColor: T.card,
+    borderRadius: 16,
+    padding: 20,
+    alignItems: 'center',
+    marginBottom: 16,
+    borderWidth: 2,
   },
   unlockEmoji: { fontSize: 40, marginBottom: 8 },
   unlockTitle: { fontSize: 17, fontWeight: '800', marginBottom: 4 },
@@ -343,23 +411,47 @@ const s = StyleSheet.create({
 
   // Quiz
   quizHeader: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingTop: 52, paddingHorizontal: 20, paddingBottom: 12, borderBottomWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 52,
+    paddingHorizontal: 20,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
   },
   quizTitle: { fontSize: 13, fontWeight: '700', flex: 1 },
   quizCount: { color: T.sub, fontSize: 13 },
   progressBar: { height: 4, backgroundColor: T.border },
   progressFill: { height: '100%' },
   quizContent: { padding: 20 },
-  questionText: { color: T.text, fontSize: 16, fontWeight: '600', lineHeight: 25, marginBottom: 20 },
+  questionText: {
+    color: T.text,
+    fontSize: 16,
+    fontWeight: '600',
+    lineHeight: 25,
+    marginBottom: 20,
+  },
   optionsWrap: { gap: 10, marginBottom: 20 },
   option: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 12,
-    backgroundColor: T.surface, borderRadius: 14, padding: 14, borderWidth: 1, borderColor: T.border,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    backgroundColor: T.surface,
+    borderRadius: 14,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: T.border,
   },
   optCorrect: { borderColor: T.green, backgroundColor: T.greenBg },
   optWrong: { borderColor: T.red, backgroundColor: T.redBg },
-  optLetter: { width: 32, height: 32, borderRadius: 8, backgroundColor: T.card, alignItems: 'center', justifyContent: 'center' },
+  optLetter: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: T.card,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   optLetterText: { color: T.text, fontSize: 12, fontWeight: '700' },
   optText: { color: T.sub, fontSize: 14, flex: 1, lineHeight: 20 },
   feedback: { borderRadius: 14, padding: 14, marginBottom: 16 },

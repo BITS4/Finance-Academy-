@@ -4,11 +4,16 @@ import { T } from '../theme';
 import { LEVELS, getLevelProgress, isLevelUnlocked } from '../data/levels';
 
 export default function InterviewPrepScreen({ progress, onInterviewPress }) {
-  const totalDone = LEVELS.filter(l => getLevelProgress(progress, l.id).interviewCompleted).length;
+  const totalDone = LEVELS.filter(
+    (l) => getLevelProgress(progress, l.id).interviewCompleted,
+  ).length;
 
   return (
-    <ScrollView style={s.container} contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
-
+    <ScrollView
+      style={s.container}
+      contentContainerStyle={s.content}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Header */}
       <View style={s.header}>
         <Text style={s.title}>Тренажёр интервью</Text>
@@ -18,7 +23,9 @@ export default function InterviewPrepScreen({ progress, onInterviewPress }) {
       {/* Stats */}
       <View style={s.statsCard}>
         <View style={s.statItem}>
-          <Text style={s.statNum}>{totalDone}/{LEVELS.length}</Text>
+          <Text style={s.statNum}>
+            {totalDone}/{LEVELS.length}
+          </Text>
           <Text style={s.statLabel}>Пройдено</Text>
         </View>
         <View style={s.statDivider} />
@@ -36,7 +43,10 @@ export default function InterviewPrepScreen({ progress, onInterviewPress }) {
       {/* Tip */}
       <View style={s.tipCard}>
         <Text style={s.tipIcon}>💡</Text>
-        <Text style={s.tipText}>Отвечай вслух — это критически важно. Структура ответа на бумаге ≠ уверенный ответ на интервью.</Text>
+        <Text style={s.tipText}>
+          Отвечай вслух — это критически важно. Структура ответа на бумаге ≠ уверенный ответ на
+          интервью.
+        </Text>
       </View>
 
       {/* Interview cards */}
@@ -60,7 +70,9 @@ export default function InterviewPrepScreen({ progress, onInterviewPress }) {
           >
             {/* Top: level + company */}
             <View style={s.cardTop}>
-              <View style={[s.levelPill, { backgroundColor: level.colorBg, borderColor: level.color }]}>
+              <View
+                style={[s.levelPill, { backgroundColor: level.colorBg, borderColor: level.color }]}
+              >
                 <Text style={s.levelPillIcon}>{level.icon}</Text>
                 <Text style={[s.levelPillText, { color: level.color }]}>Уровень {level.num}</Text>
               </View>
@@ -83,13 +95,21 @@ export default function InterviewPrepScreen({ progress, onInterviewPress }) {
             <Text style={s.roleText}>{q.role}</Text>
 
             {/* Question */}
-            <Text style={s.questionText} numberOfLines={3}>"{q.question}"</Text>
+            <Text style={s.questionText} numberOfLines={3}>
+              "{q.question}"
+            </Text>
 
             {/* Type + timer */}
             <View style={s.cardMeta}>
               <View style={[s.typePill, { backgroundColor: level.colorBg }]}>
                 <Text style={[s.typeText, { color: level.color }]}>
-                  {{ hypothesis: '🌳 Гипотезы', chain: '🔗 Цепочка', market_impact: '📈 Рынок', technical: '🔧 Техника', pitch: '🎯 Питч' }[q.type] || q.type}
+                  {{
+                    hypothesis: '🌳 Гипотезы',
+                    chain: '🔗 Цепочка',
+                    market_impact: '📈 Рынок',
+                    technical: '🔧 Техника',
+                    pitch: '🎯 Питч',
+                  }[q.type] || q.type}
                 </Text>
               </View>
               <Text style={s.timerText}>⏱ {Math.floor(q.timeLimit / 60)} мин</Text>
@@ -105,9 +125,7 @@ export default function InterviewPrepScreen({ progress, onInterviewPress }) {
               </View>
             )}
 
-            {!unlocked && (
-              <Text style={s.lockedHint}>Сначала пройдите Уровень {level.id - 1}</Text>
-            )}
+            {!unlocked && <Text style={s.lockedHint}>Сначала пройдите Уровень {level.id - 1}</Text>}
           </TouchableOpacity>
         );
       })}
@@ -116,7 +134,9 @@ export default function InterviewPrepScreen({ progress, onInterviewPress }) {
       <View style={s.proTipCard}>
         <Text style={s.proTipTitle}>🏆 Совет от Senior Analyst</Text>
         <Text style={s.proTipText}>
-          На Superday в Goldman Sachs каждый раунд — это не экзамен. Это разговор двух профессионалов. Твоя задача: показать структуру мышления, а не угадать «правильный» ответ. Ошибиться в расчётах и объяснить логику — лучше, чем дать правильный ответ без понимания.
+          На Superday в Goldman Sachs каждый раунд — это не экзамен. Это разговор двух
+          профессионалов. Твоя задача: показать структуру мышления, а не угадать «правильный» ответ.
+          Ошибиться в расчётах и объяснить логику — лучше, чем дать правильный ответ без понимания.
         </Text>
       </View>
 
@@ -134,8 +154,13 @@ const s = StyleSheet.create({
   sub: { color: T.sub, fontSize: 13, marginTop: 4 },
 
   statsCard: {
-    flexDirection: 'row', backgroundColor: T.surface, borderRadius: 16,
-    padding: 16, marginBottom: 14, borderWidth: 1, borderColor: T.border,
+    flexDirection: 'row',
+    backgroundColor: T.surface,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: T.border,
     alignItems: 'center',
   },
   statItem: { flex: 1, alignItems: 'center' },
@@ -144,21 +169,41 @@ const s = StyleSheet.create({
   statDivider: { width: 1, height: 36, backgroundColor: T.border },
 
   tipCard: {
-    flexDirection: 'row', gap: 10, backgroundColor: T.goldBg,
-    borderRadius: 12, padding: 12, marginBottom: 16, borderWidth: 1, borderColor: T.gold,
+    flexDirection: 'row',
+    gap: 10,
+    backgroundColor: T.goldBg,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: T.gold,
   },
   tipIcon: { fontSize: 20 },
   tipText: { color: T.gold, fontSize: 12, lineHeight: 19, flex: 1 },
 
   card: {
-    backgroundColor: T.surface, borderRadius: 18, padding: 16,
-    marginBottom: 12, borderWidth: 2,
+    backgroundColor: T.surface,
+    borderRadius: 18,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 2,
   },
   cardLocked: { opacity: 0.55 },
-  cardTop: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' },
+  cardTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 8,
+    flexWrap: 'wrap',
+  },
   levelPill: {
-    flexDirection: 'row', alignItems: 'center', gap: 4,
-    paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    borderWidth: 1,
   },
   levelPillIcon: { fontSize: 12 },
   levelPillText: { fontSize: 11, fontWeight: '700' },
@@ -170,7 +215,13 @@ const s = StyleSheet.create({
   lockText: { fontSize: 18 },
 
   roleText: { color: T.faint, fontSize: 11, fontStyle: 'italic', marginBottom: 6 },
-  questionText: { color: T.text, fontSize: 14, fontStyle: 'italic', lineHeight: 21, marginBottom: 10 },
+  questionText: {
+    color: T.text,
+    fontSize: 14,
+    fontStyle: 'italic',
+    lineHeight: 21,
+    marginBottom: 10,
+  },
 
   cardMeta: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   typePill: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
@@ -180,11 +231,21 @@ const s = StyleSheet.create({
 
   actionRow: { marginTop: 12, paddingTop: 10, borderTopWidth: 1 },
   actionText: { fontSize: 13, fontWeight: '700', textAlign: 'center' },
-  lockedHint: { color: T.faint, fontSize: 11, textAlign: 'center', marginTop: 8, fontStyle: 'italic' },
+  lockedHint: {
+    color: T.faint,
+    fontSize: 11,
+    textAlign: 'center',
+    marginTop: 8,
+    fontStyle: 'italic',
+  },
 
   proTipCard: {
-    backgroundColor: T.card, borderRadius: 16, padding: 16, marginTop: 8,
-    borderWidth: 1, borderColor: T.borderHi,
+    backgroundColor: T.card,
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: T.borderHi,
   },
   proTipTitle: { color: T.gold, fontSize: 14, fontWeight: '700', marginBottom: 8 },
   proTipText: { color: T.sub, fontSize: 13, lineHeight: 20 },

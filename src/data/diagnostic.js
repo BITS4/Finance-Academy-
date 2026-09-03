@@ -118,15 +118,12 @@ export const DIAGNOSTIC = [
 // Определение уровня по результатам диагностики
 export function determineLevel(answers) {
   // answers: [{questionId, selectedIndex, isCorrect}]
-  const basicQs = DIAGNOSTIC.filter(q => q.level === 'basic');
   const interQs = DIAGNOSTIC.filter(q => q.level === 'intermediate');
   const advQs = DIAGNOSTIC.filter(q => q.level === 'advanced');
 
-  const basicIds = basicQs.map(q => q.id);
   const interIds = interQs.map(q => q.id);
   const advIds = advQs.map(q => q.id);
 
-  const basicCorrect = answers.filter(a => basicIds.includes(a.questionId) && a.isCorrect).length;
   const interCorrect = answers.filter(a => interIds.includes(a.questionId) && a.isCorrect).length;
   const advCorrect = answers.filter(a => advIds.includes(a.questionId) && a.isCorrect).length;
 

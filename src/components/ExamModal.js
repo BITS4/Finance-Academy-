@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { T } from '../theme';
 import { EXAM_QUESTIONS } from '../data/questions';
 
@@ -22,13 +20,19 @@ export default function ExamModal({ course, onClose, onDone }) {
     if (cur < questions.length - 1) {
       setCur(cur + 1);
     } else {
-      const score = Math.round((ans.filter(a => a.sel === a.correct).length / questions.length) * 100);
-      setReview(questions.map((q, i) => ({
-        q: q.q, opts: q.opts,
-        sel: ans[i].sel, correct: q.correct,
-        explanation: q.explanation,
-        ok: ans[i].sel === q.correct,
-      })));
+      const score = Math.round(
+        (ans.filter((a) => a.sel === a.correct).length / questions.length) * 100,
+      );
+      setReview(
+        questions.map((q, i) => ({
+          q: q.q,
+          opts: q.opts,
+          sel: ans[i].sel,
+          correct: q.correct,
+          explanation: q.explanation,
+          ok: ans[i].sel === q.correct,
+        })),
+      );
       setResults({ score });
       setPhase('results');
     }
@@ -41,16 +45,22 @@ export default function ExamModal({ course, onClose, onDone }) {
       <View style={s.container}>
         <View style={s.header}>
           <Text style={s.title}>🏆 Финальный экзамен</Text>
-          <TouchableOpacity onPress={onClose}><Text style={s.close}>✕</Text></TouchableOpacity>
+          <TouchableOpacity onPress={onClose}>
+            <Text style={s.close}>✕</Text>
+          </TouchableOpacity>
         </View>
 
         <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
           {phase === 'quiz' && q && (
             <View>
               <View style={s.qHeader}>
-                <Text style={s.qNum}>Вопрос {cur + 1} / {questions.length}</Text>
+                <Text style={s.qNum}>
+                  Вопрос {cur + 1} / {questions.length}
+                </Text>
                 <View style={s.miniBar}>
-                  <View style={[s.miniBarFill, { width: `${((cur + 1) / questions.length) * 100}%` }]} />
+                  <View
+                    style={[s.miniBarFill, { width: `${((cur + 1) / questions.length) * 100}%` }]}
+                  />
                 </View>
               </View>
               <Text style={s.question}>{q.q}</Text>
@@ -86,10 +96,16 @@ export default function ExamModal({ course, onClose, onDone }) {
           {phase === 'results' && results && (
             <View>
               <View style={[s.scoreCard, results.score >= 70 ? s.scorePass : s.scoreFail]}>
-                <Text style={s.scoreEmoji}>{results.score >= 90 ? '🏆' : results.score >= 70 ? '✅' : '📚'}</Text>
+                <Text style={s.scoreEmoji}>
+                  {results.score >= 90 ? '🏆' : results.score >= 70 ? '✅' : '📚'}
+                </Text>
                 <Text style={s.scoreNum}>{results.score}%</Text>
                 <Text style={s.scoreVerdict}>
-                  {results.score >= 90 ? 'Отлично!' : results.score >= 70 ? 'Зачёт!' : 'Нужна доработка'}
+                  {results.score >= 90
+                    ? 'Отлично!'
+                    : results.score >= 70
+                      ? 'Зачёт!'
+                      : 'Нужна доработка'}
                 </Text>
               </View>
 
@@ -104,9 +120,15 @@ export default function ExamModal({ course, onClose, onDone }) {
               )}
 
               {results.score < 70 && (
-                <TouchableOpacity style={s.retryBtn} onPress={() => {
-                  setAnswers([]); setCur(0); setSelected(null); setPhase('quiz');
-                }}>
+                <TouchableOpacity
+                  style={s.retryBtn}
+                  onPress={() => {
+                    setAnswers([]);
+                    setCur(0);
+                    setSelected(null);
+                    setPhase('quiz');
+                  }}
+                >
                   <Text style={s.retryText}>🔄 Пересдать экзамен</Text>
                 </TouchableOpacity>
               )}
@@ -114,7 +136,9 @@ export default function ExamModal({ course, onClose, onDone }) {
               <Text style={s.reviewTitle}>Разбор ответов</Text>
               {review.map((item, i) => (
                 <View key={i} style={[s.reviewItem, item.ok ? s.reviewOk : s.reviewFail]}>
-                  <Text style={s.reviewQ}>{i + 1}. {item.q}</Text>
+                  <Text style={s.reviewQ}>
+                    {i + 1}. {item.q}
+                  </Text>
                   <Text style={item.ok ? s.ansOk : s.ansFail}>
                     Ваш ответ: {item.opts[item.sel]}
                   </Text>
@@ -140,9 +164,14 @@ export default function ExamModal({ course, onClose, onDone }) {
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: T.bg },
   header: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingTop: 52, paddingHorizontal: 20, paddingBottom: 16,
-    borderBottomWidth: 1, borderColor: T.border,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 52,
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderColor: T.border,
   },
   title: { color: T.text, fontSize: 20, fontWeight: '700' },
   close: { color: T.sub, fontSize: 24 },
@@ -154,14 +183,23 @@ const s = StyleSheet.create({
   question: { color: T.text, fontSize: 17, fontWeight: '500', lineHeight: 26, marginBottom: 24 },
   options: { gap: 10, marginBottom: 28 },
   option: {
-    flexDirection: 'row', alignItems: 'center', gap: 14,
-    backgroundColor: T.surface, borderRadius: 12,
-    padding: 14, borderWidth: 1, borderColor: T.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    backgroundColor: T.surface,
+    borderRadius: 12,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: T.border,
   },
   optionSelected: { borderColor: T.gold, backgroundColor: T.goldBg },
   letter: {
-    width: 32, height: 32, borderRadius: 8,
-    backgroundColor: T.card, alignItems: 'center', justifyContent: 'center',
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: T.card,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   letterSelected: { backgroundColor: T.gold },
   letterText: { color: T.sub, fontSize: 14, fontWeight: '700' },
@@ -176,18 +214,31 @@ const s = StyleSheet.create({
   scoreNum: { color: T.text, fontSize: 48, fontWeight: '700' },
   scoreVerdict: { color: T.sub, fontSize: 16, marginTop: 4 },
   certCard: {
-    backgroundColor: T.goldBg, borderRadius: 16, padding: 20,
-    marginBottom: 20, alignItems: 'center',
-    borderWidth: 1, borderColor: T.gold,
+    backgroundColor: T.goldBg,
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 20,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: T.gold,
   },
   certTitle: { color: T.gold, fontSize: 20, fontWeight: '700', marginBottom: 8 },
   certCourse: { color: T.text, fontSize: 14, marginBottom: 16, textAlign: 'center' },
-  certBtn: { backgroundColor: T.gold, paddingHorizontal: 24, paddingVertical: 12, borderRadius: 12 },
+  certBtn: {
+    backgroundColor: T.gold,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
   certBtnText: { color: '#000', fontWeight: '700', fontSize: 14 },
   retryBtn: {
-    backgroundColor: T.surface, borderRadius: 14, padding: 16,
-    alignItems: 'center', marginBottom: 20,
-    borderWidth: 1, borderColor: T.border,
+    backgroundColor: T.surface,
+    borderRadius: 14,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: T.border,
   },
   retryText: { color: T.text, fontSize: 15, fontWeight: '600' },
   reviewTitle: { color: T.text, fontSize: 17, fontWeight: '600', marginBottom: 14 },
@@ -200,9 +251,13 @@ const s = StyleSheet.create({
   correct: { color: T.green, fontSize: 13, marginBottom: 8 },
   explain: { color: T.sub, fontSize: 12, lineHeight: 18 },
   closeBtn: {
-    backgroundColor: T.surface, borderRadius: 14, padding: 16,
-    alignItems: 'center', marginTop: 10,
-    borderWidth: 1, borderColor: T.border,
+    backgroundColor: T.surface,
+    borderRadius: 14,
+    padding: 16,
+    alignItems: 'center',
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: T.border,
   },
   closeBtnText: { color: T.text, fontSize: 15, fontWeight: '600' },
 });

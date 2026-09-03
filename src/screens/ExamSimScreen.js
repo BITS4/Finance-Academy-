@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { T } from '../theme';
 import { FINAL_EXAM } from '../data/practiceQuestions';
 
@@ -14,8 +12,6 @@ export default function ExamSimScreen({ onClose, onPass }) {
 
   const totalQ = FINAL_EXAM.length;
   const q = cur < totalQ ? FINAL_EXAM[cur] : null;
-  const score = answers.filter(a => a.isCorrect).length;
-  const pct = answers.length ? Math.round((score / totalQ) * 100) : 0;
 
   function confirm() {
     if (selected === null) return;
@@ -23,11 +19,14 @@ export default function ExamSimScreen({ onClose, onPass }) {
   }
 
   function goNext() {
-    const newAnswers = [...answers, {
-      isCorrect: selected === q.correct,
-      selected,
-      correct: q.correct,
-    }];
+    const newAnswers = [
+      ...answers,
+      {
+        isCorrect: selected === q.correct,
+        selected,
+        correct: q.correct,
+      },
+    ];
     setAnswers(newAnswers);
     setSelected(null);
     setConfirmed(false);
@@ -43,12 +42,13 @@ export default function ExamSimScreen({ onClose, onPass }) {
     const isCorrect = selected === q.correct;
     const isAlmost = q.almost?.includes(selected);
     if (isCorrect) return { type: 'correct', msg: '✅ ' + q.explanation };
-    if (isAlmost) return { type: 'almost', msg: '🟡 ' + (q.almostMsg || '') + '\n' + q.explanation };
+    if (isAlmost)
+      return { type: 'almost', msg: '🟡 ' + (q.almostMsg || '') + '\n' + q.explanation };
     return { type: 'wrong', msg: '❌ ' + q.explanation };
   }
 
   const feedback = getFeedback();
-  const finalScore = answers.filter(a => a.isCorrect).length;
+  const finalScore = answers.filter((a) => a.isCorrect).length;
   const finalPct = Math.round((finalScore / totalQ) * 100);
   const passed = finalPct >= 70;
 
@@ -94,14 +94,20 @@ export default function ExamSimScreen({ onClose, onPass }) {
         <View style={[s.scoreCard, passed ? s.scorePass : s.scoreFail]}>
           <Text style={s.scoreEmoji}>{finalPct >= 90 ? '🏆' : finalPct >= 70 ? '✅' : '📚'}</Text>
           <Text style={s.scoreNum}>{finalPct}%</Text>
-          <Text style={s.scoreLabel}>{finalScore}/{totalQ} правильных</Text>
-          <Text style={s.scoreVerdict}>{finalPct >= 90 ? 'Превосходно!' : finalPct >= 70 ? 'Экзамен сдан!' : 'Нужна доработка'}</Text>
+          <Text style={s.scoreLabel}>
+            {finalScore}/{totalQ} правильных
+          </Text>
+          <Text style={s.scoreVerdict}>
+            {finalPct >= 90 ? 'Превосходно!' : finalPct >= 70 ? 'Экзамен сдан!' : 'Нужна доработка'}
+          </Text>
         </View>
 
         {passed && (
           <View style={s.certCard}>
             <Text style={s.certTitle}>🎓 Вы готовы к официальному экзамену!</Text>
-            <Text style={s.certDesc}>Результат {finalPct}% говорит о хорошей подготовке. Продолжайте практиковаться!</Text>
+            <Text style={s.certDesc}>
+              Результат {finalPct}% говорит о хорошей подготовке. Продолжайте практиковаться!
+            </Text>
             <TouchableOpacity style={s.certBtn} onPress={() => onPass(finalPct)}>
               <Text style={s.certBtnText}>Сохранить результат</Text>
             </TouchableOpacity>
@@ -109,9 +115,16 @@ export default function ExamSimScreen({ onClose, onPass }) {
         )}
 
         {!passed && (
-          <TouchableOpacity style={s.retryBtn} onPress={() => {
-            setAnswers([]); setCur(0); setSelected(null); setConfirmed(false); setPhase('quiz');
-          }}>
+          <TouchableOpacity
+            style={s.retryBtn}
+            onPress={() => {
+              setAnswers([]);
+              setCur(0);
+              setSelected(null);
+              setConfirmed(false);
+              setPhase('quiz');
+            }}
+          >
             <Text style={s.retryText}>🔄 Пересдать экзамен</Text>
           </TouchableOpacity>
         )}
@@ -124,8 +137,23 @@ export default function ExamSimScreen({ onClose, onPass }) {
             <View key={q2.id} style={[s.reviewItem, ans.isCorrect ? s.reviewOk : s.reviewFail]}>
               <View style={s.reviewHeader}>
                 <Text style={s.reviewNum}>#{i + 1}</Text>
-                <View style={[s.typePill, q2.type === 'calc' ? s.typePillCalc : q2.type === 'entry' ? s.typePillEntry : s.typePillChoice]}>
-                  <Text style={s.typePillText}>{q2.type === 'calc' ? '🧮 Расчёт' : q2.type === 'entry' ? '📝 Проводка' : '💬 Тест'}</Text>
+                <View
+                  style={[
+                    s.typePill,
+                    q2.type === 'calc'
+                      ? s.typePillCalc
+                      : q2.type === 'entry'
+                        ? s.typePillEntry
+                        : s.typePillChoice,
+                  ]}
+                >
+                  <Text style={s.typePillText}>
+                    {q2.type === 'calc'
+                      ? '🧮 Расчёт'
+                      : q2.type === 'entry'
+                        ? '📝 Проводка'
+                        : '💬 Тест'}
+                  </Text>
                 </View>
               </View>
               <Text style={s.reviewQ}>{q2.q}</Text>
@@ -158,19 +186,34 @@ export default function ExamSimScreen({ onClose, onPass }) {
       {/* Header */}
       <View style={s.header}>
         <Text style={s.headerTitle}>Экзамен</Text>
-        <Text style={s.headerCount}>{cur + 1} / {totalQ}</Text>
+        <Text style={s.headerCount}>
+          {cur + 1} / {totalQ}
+        </Text>
       </View>
 
       {/* Progress */}
       <View style={s.progBarWrap}>
-        <View style={[s.progBarFill, { width: `${((cur) / totalQ) * 100}%` }]} />
+        <View style={[s.progBarFill, { width: `${(cur / totalQ) * 100}%` }]} />
       </View>
 
       <ScrollView contentContainerStyle={s.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Type badge */}
-        <View style={[s.typeBadge, q.type === 'calc' ? s.typeBadgeCalc : q.type === 'entry' ? s.typeBadgeEntry : s.typeBadgeChoice]}>
+        <View
+          style={[
+            s.typeBadge,
+            q.type === 'calc'
+              ? s.typeBadgeCalc
+              : q.type === 'entry'
+                ? s.typeBadgeEntry
+                : s.typeBadgeChoice,
+          ]}
+        >
           <Text style={s.typeBadgeText}>
-            {q.type === 'calc' ? '🧮 Расчётная задача' : q.type === 'entry' ? '📝 Составить проводку' : '💬 Тест'}
+            {q.type === 'calc'
+              ? '🧮 Расчётная задача'
+              : q.type === 'entry'
+                ? '📝 Составить проводку'
+                : '💬 Тест'}
           </Text>
         </View>
 
@@ -194,42 +237,70 @@ export default function ExamSimScreen({ onClose, onPass }) {
             }
             return (
               <TouchableOpacity
-                key={i} style={optStyle}
+                key={i}
+                style={optStyle}
                 onPress={() => !confirmed && setSelected(i)}
-                disabled={confirmed} activeOpacity={0.7}
+                disabled={confirmed}
+                activeOpacity={0.7}
               >
-                <View style={[s.letter,
-                  confirmed && i === q.correct && { backgroundColor: T.green },
-                  confirmed && i === selected && i !== q.correct && { backgroundColor: T.red },
-                  !confirmed && selected === i && { backgroundColor: T.gold },
-                ]}>
+                <View
+                  style={[
+                    s.letter,
+                    confirmed && i === q.correct && { backgroundColor: T.green },
+                    confirmed && i === selected && i !== q.correct && { backgroundColor: T.red },
+                    !confirmed && selected === i && { backgroundColor: T.gold },
+                  ]}
+                >
                   <Text style={s.letterText}>{['А', 'Б', 'В', 'Г'][i]}</Text>
                 </View>
-                <Text style={[s.optText,
-                  confirmed && i === q.correct && { color: T.green, fontWeight: '600' },
-                  confirmed && i === selected && i !== q.correct && { color: T.red },
-                ]}>{opt}</Text>
+                <Text
+                  style={[
+                    s.optText,
+                    confirmed && i === q.correct && { color: T.green, fontWeight: '600' },
+                    confirmed && i === selected && i !== q.correct && { color: T.red },
+                  ]}
+                >
+                  {opt}
+                </Text>
               </TouchableOpacity>
             );
           })}
         </View>
 
         {feedback && (
-          <View style={[s.feedback,
-            feedback.type === 'correct' ? s.fbCorrect :
-            feedback.type === 'almost' ? s.fbAlmost : s.fbWrong
-          ]}>
-            <Text style={[s.feedbackText, {
-              color: feedback.type === 'correct' ? T.green :
-                     feedback.type === 'almost' ? T.gold : T.red
-            }]}>{feedback.msg}</Text>
+          <View
+            style={[
+              s.feedback,
+              feedback.type === 'correct'
+                ? s.fbCorrect
+                : feedback.type === 'almost'
+                  ? s.fbAlmost
+                  : s.fbWrong,
+            ]}
+          >
+            <Text
+              style={[
+                s.feedbackText,
+                {
+                  color:
+                    feedback.type === 'correct'
+                      ? T.green
+                      : feedback.type === 'almost'
+                        ? T.gold
+                        : T.red,
+                },
+              ]}
+            >
+              {feedback.msg}
+            </Text>
           </View>
         )}
 
         {!confirmed ? (
           <TouchableOpacity
             style={[s.btn, selected === null && s.btnDisabled]}
-            onPress={confirm} disabled={selected === null}
+            onPress={confirm}
+            disabled={selected === null}
           >
             <Text style={s.btnText}>Проверить ответ</Text>
           </TouchableOpacity>
@@ -261,39 +332,97 @@ const s = StyleSheet.create({
 
   intro: { flex: 1, backgroundColor: T.bg, padding: 24, justifyContent: 'center' },
   introEmoji: { fontSize: 64, textAlign: 'center', marginBottom: 16 },
-  introTitle: { color: T.text, fontSize: 24, fontWeight: '700', textAlign: 'center', marginBottom: 10 },
+  introTitle: {
+    color: T.text,
+    fontSize: 24,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
   introDesc: { color: T.sub, fontSize: 14, textAlign: 'center', lineHeight: 22, marginBottom: 28 },
   rules: { gap: 10, marginBottom: 32 },
-  rule: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: T.surface, padding: 14, borderRadius: 12, borderWidth: 1, borderColor: T.border },
+  rule: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: T.surface,
+    padding: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: T.border,
+  },
   ruleIcon: { fontSize: 22 },
   ruleText: { color: T.sub, fontSize: 13, flex: 1 },
-  startBtn: { backgroundColor: T.gold, borderRadius: 14, padding: 16, alignItems: 'center', marginBottom: 12 },
+  startBtn: {
+    backgroundColor: T.gold,
+    borderRadius: 14,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
   startBtnText: { color: '#000', fontSize: 16, fontWeight: '700' },
   cancelBtn: { alignItems: 'center', padding: 12 },
   cancelBtnText: { color: T.sub, fontSize: 14 },
 
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop: 52, paddingHorizontal: 20, paddingBottom: 12 },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 52,
+    paddingHorizontal: 20,
+    paddingBottom: 12,
+  },
   headerTitle: { color: T.text, fontSize: 18, fontWeight: '700' },
   headerCount: { color: T.sub, fontSize: 14 },
   progBarWrap: { height: 4, backgroundColor: T.border },
   progBarFill: { height: '100%', backgroundColor: T.gold },
   scrollContent: { padding: 20 },
 
-  typeBadge: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 12 },
+  typeBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+    marginBottom: 12,
+  },
   typeBadgeCalc: { backgroundColor: T.blueBg },
   typeBadgeEntry: { backgroundColor: T.purpleBg },
   typeBadgeChoice: { backgroundColor: T.goldBg },
   typeBadgeText: { fontSize: 12, fontWeight: '600', color: T.gold },
 
-  formulaHint: { backgroundColor: T.card, borderRadius: 10, padding: 12, marginBottom: 14, borderLeftWidth: 3, borderLeftColor: T.gold },
+  formulaHint: {
+    backgroundColor: T.card,
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 14,
+    borderLeftWidth: 3,
+    borderLeftColor: T.gold,
+  },
   formulaHintText: { color: T.gold, fontSize: 13, fontFamily: 'monospace' },
   question: { color: T.text, fontSize: 17, fontWeight: '600', lineHeight: 28, marginBottom: 24 },
   options: { gap: 10, marginBottom: 20 },
-  option: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, backgroundColor: T.surface, borderRadius: 14, padding: 16, borderWidth: 1, borderColor: T.border },
+  option: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    backgroundColor: T.surface,
+    borderRadius: 14,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: T.border,
+  },
   optSelected: { borderColor: T.gold, backgroundColor: T.goldBg },
   optCorrect: { borderColor: T.green, backgroundColor: T.greenBg },
   optWrong: { borderColor: T.red, backgroundColor: T.redBg },
-  letter: { width: 34, height: 34, borderRadius: 8, backgroundColor: T.card, alignItems: 'center', justifyContent: 'center', marginTop: 1 },
+  letter: {
+    width: 34,
+    height: 34,
+    borderRadius: 8,
+    backgroundColor: T.card,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 1,
+  },
   letterText: { color: T.text, fontSize: 13, fontWeight: '700' },
   optText: { color: T.sub, fontSize: 14, flex: 1, lineHeight: 22 },
   feedback: { borderRadius: 14, padding: 16, marginBottom: 16 },
@@ -313,12 +442,27 @@ const s = StyleSheet.create({
   scoreNum: { color: T.text, fontSize: 52, fontWeight: '700' },
   scoreLabel: { color: T.sub, fontSize: 14, marginTop: 4 },
   scoreVerdict: { color: T.text, fontSize: 18, fontWeight: '600', marginTop: 8 },
-  certCard: { backgroundColor: T.goldBg, borderRadius: 16, padding: 20, marginBottom: 20, borderWidth: 1, borderColor: T.gold },
+  certCard: {
+    backgroundColor: T.goldBg,
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: T.gold,
+  },
   certTitle: { color: T.gold, fontSize: 18, fontWeight: '700', marginBottom: 8 },
   certDesc: { color: T.sub, fontSize: 13, lineHeight: 20, marginBottom: 16 },
   certBtn: { backgroundColor: T.gold, borderRadius: 12, padding: 14, alignItems: 'center' },
   certBtnText: { color: '#000', fontWeight: '700', fontSize: 14 },
-  retryBtn: { backgroundColor: T.surface, borderRadius: 14, padding: 16, alignItems: 'center', marginBottom: 20, borderWidth: 1, borderColor: T.border },
+  retryBtn: {
+    backgroundColor: T.surface,
+    borderRadius: 14,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: T.border,
+  },
   retryText: { color: T.text, fontSize: 15, fontWeight: '600' },
   reviewTitle: { color: T.text, fontSize: 17, fontWeight: '600', marginBottom: 14 },
   reviewItem: { borderRadius: 14, padding: 16, marginBottom: 12 },
@@ -338,6 +482,14 @@ const s = StyleSheet.create({
   formulaBox: { backgroundColor: 'rgba(0,0,0,0.15)', borderRadius: 8, padding: 8, marginBottom: 8 },
   formulaText: { color: T.gold, fontSize: 12, fontFamily: 'monospace' },
   explain: { color: T.sub, fontSize: 13, lineHeight: 20 },
-  closeBtn: { backgroundColor: T.surface, borderRadius: 14, padding: 16, alignItems: 'center', marginTop: 12, borderWidth: 1, borderColor: T.border },
+  closeBtn: {
+    backgroundColor: T.surface,
+    borderRadius: 14,
+    padding: 16,
+    alignItems: 'center',
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: T.border,
+  },
   closeBtnText: { color: T.text, fontSize: 15, fontWeight: '600' },
 });

@@ -1,7 +1,13 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { T } from '../theme';
-import { LEVELS, getLevelProgress, getLevelCompletionPct, isLevelUnlocked, getTotalXP } from '../data/levels';
+import {
+  LEVELS,
+  getLevelProgress,
+  getLevelCompletionPct,
+  isLevelUnlocked,
+  getTotalXP,
+} from '../data/levels';
 
 const XP_RANKS = [
   { min: 0, label: 'Finance Rookie', emoji: '🌱' },
@@ -32,15 +38,21 @@ export default function HomeScreen({ progress, onLevelPress }) {
   const nextRank = getNextRank(totalXP);
   const xpToNext = nextRank ? nextRank.min - totalXP : 0;
   const xpPct = nextRank
-    ? Math.round(((totalXP - (getRank(totalXP)?.min || 0)) / (nextRank.min - (getRank(totalXP)?.min || 0))) * 100)
+    ? Math.round(
+        ((totalXP - (getRank(totalXP)?.min || 0)) / (nextRank.min - (getRank(totalXP)?.min || 0))) *
+          100,
+      )
     : 100;
 
   const totalLevels = LEVELS.length;
-  const passedLevels = LEVELS.filter(l => getLevelProgress(progress, l.id).gatePassed).length;
+  const passedLevels = LEVELS.filter((l) => getLevelProgress(progress, l.id).gatePassed).length;
 
   return (
-    <ScrollView style={s.container} contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
-
+    <ScrollView
+      style={s.container}
+      contentContainerStyle={s.content}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Header */}
       <View style={s.header}>
         <View>
@@ -82,7 +94,12 @@ export default function HomeScreen({ progress, onLevelPress }) {
 
       {/* Overall stats */}
       <View style={s.statsRow}>
-        <StatChip icon="🏆" value={`${passedLevels}/${totalLevels}`} label="Уровней пройдено" color={T.gold} />
+        <StatChip
+          icon="🏆"
+          value={`${passedLevels}/${totalLevels}`}
+          label="Уровней пройдено"
+          color={T.gold}
+        />
         <StatChip icon="⚡" value={`${totalXP}`} label="Total XP" color={T.purple} />
         <StatChip icon="🎯" value={`CFA/ACCA`} label="Целевой экзамен" color={T.green} />
       </View>
@@ -90,24 +107,25 @@ export default function HomeScreen({ progress, onLevelPress }) {
       {/* Path title */}
       <View style={s.pathHeader}>
         <Text style={s.pathTitle}>Карьерный путь</Text>
-        <Text style={s.pathSub}>От основ до IB Analyst · Junior-уровень за {totalLevels} уровней</Text>
+        <Text style={s.pathSub}>
+          От основ до IB Analyst · Junior-уровень за {totalLevels} уровней
+        </Text>
       </View>
 
       {/* Level nodes */}
-      {LEVELS.map((level, idx) => {
+      {LEVELS.map((level) => {
         const lp = getLevelProgress(progress, level.id);
         const pct = getLevelCompletionPct(progress, level.id);
         const unlocked = isLevelUnlocked(progress, level.id);
         const passed = lp.gatePassed;
-        const isLast = idx === LEVELS.length - 1;
 
-        const allLessons = level.modules.flatMap(m => m.lessons);
+        const allLessons = level.modules.flatMap((m) => m.lessons);
         const doneLessons = lp.lessonsCompleted.length;
 
         return (
           <View key={level.id}>
             {/* Connector line from previous level */}
-            {idx > 0 && (
+            {level.id > 1 && (
               <View style={s.connector}>
                 <View style={[s.connLine, { backgroundColor: passed ? T.gold : T.border }]} />
                 {passed && <Text style={s.connCheck}>✓</Text>}
@@ -136,12 +154,20 @@ export default function HomeScreen({ progress, onLevelPress }) {
 
               {/* Top row */}
               <View style={s.levelTop}>
-                <View style={[s.levelNumBadge, { backgroundColor: level.colorBg, borderColor: level.color }]}>
+                <View
+                  style={[
+                    s.levelNumBadge,
+                    { backgroundColor: level.colorBg, borderColor: level.color },
+                  ]}
+                >
                   <Text style={[s.levelNum, { color: level.color }]}>{level.num}</Text>
                 </View>
                 <View style={s.levelTitleWrap}>
                   <Text style={[s.levelTitle, !unlocked && { color: T.faint }]}>{level.title}</Text>
-                  <Text style={[s.levelSub, { color: unlocked ? level.color : T.faint }]} numberOfLines={1}>
+                  <Text
+                    style={[s.levelSub, { color: unlocked ? level.color : T.faint }]}
+                    numberOfLines={1}
+                  >
                     {level.icon} {level.subtitle}
                   </Text>
                 </View>
@@ -152,13 +178,17 @@ export default function HomeScreen({ progress, onLevelPress }) {
 
               {/* Narrative */}
               {unlocked && (
-                <Text style={s.levelNarrative} numberOfLines={2}>{level.narrative}</Text>
+                <Text style={s.levelNarrative} numberOfLines={2}>
+                  {level.narrative}
+                </Text>
               )}
 
               {/* Target exam */}
               {unlocked && (
                 <View style={s.examBadge}>
-                  <Text style={[s.examBadgeText, { color: level.color }]}>🎓 {level.targetExam}</Text>
+                  <Text style={[s.examBadgeText, { color: level.color }]}>
+                    🎓 {level.targetExam}
+                  </Text>
                 </View>
               )}
 
@@ -174,7 +204,9 @@ export default function HomeScreen({ progress, onLevelPress }) {
                     <Text style={[s.progressPct, { color: level.color }]}>{pct}%</Text>
                   </View>
                   <View style={s.progressBar}>
-                    <View style={[s.progressFill, { width: `${pct}%`, backgroundColor: level.color }]} />
+                    <View
+                      style={[s.progressFill, { width: `${pct}%`, backgroundColor: level.color }]}
+                    />
                   </View>
                 </View>
               )}
@@ -182,11 +214,20 @@ export default function HomeScreen({ progress, onLevelPress }) {
               {/* Status badge */}
               <View style={s.statusRow}>
                 {passed ? (
-                  <View style={[s.statusBadge, { backgroundColor: T.greenBg, borderColor: T.green }]}>
-                    <Text style={[s.statusText, { color: T.green }]}>✅ Уровень пройден · {lp.gateScore}%</Text>
+                  <View
+                    style={[s.statusBadge, { backgroundColor: T.greenBg, borderColor: T.green }]}
+                  >
+                    <Text style={[s.statusText, { color: T.green }]}>
+                      ✅ Уровень пройден · {lp.gateScore}%
+                    </Text>
                   </View>
                 ) : unlocked && pct > 0 ? (
-                  <View style={[s.statusBadge, { backgroundColor: level.colorBg, borderColor: level.color }]}>
+                  <View
+                    style={[
+                      s.statusBadge,
+                      { backgroundColor: level.colorBg, borderColor: level.color },
+                    ]}
+                  >
                     <Text style={[s.statusText, { color: level.color }]}>📖 В процессе</Text>
                   </View>
                 ) : unlocked ? (
@@ -208,7 +249,9 @@ export default function HomeScreen({ progress, onLevelPress }) {
         <View style={s.certCard}>
           <Text style={s.certEmoji}>🏆</Text>
           <Text style={s.certTitle}>Junior Analyst — достигнут!</Text>
-          <Text style={s.certSub}>Все 5 уровней пройдены. Ты готов к техническим интервью в IB.</Text>
+          <Text style={s.certSub}>
+            Все 5 уровней пройдены. Ты готов к техническим интервью в IB.
+          </Text>
         </View>
       )}
 
@@ -231,17 +274,36 @@ const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: T.bg },
   content: { padding: 20, paddingTop: 56 },
 
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
   appName: { color: T.text, fontSize: 22, fontWeight: '800', letterSpacing: 0.5 },
   appSub: { color: T.sub, fontSize: 12, marginTop: 2 },
-  xpBadge: { backgroundColor: T.goldBg, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 6, alignItems: 'center', borderWidth: 1, borderColor: T.gold },
+  xpBadge: {
+    backgroundColor: T.goldBg,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: T.gold,
+  },
   xpNum: { color: T.gold, fontSize: 18, fontWeight: '800' },
   xpLabel: { color: T.gold, fontSize: 9, fontWeight: '700' },
 
   rankCard: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    backgroundColor: T.surface, borderRadius: 16, padding: 14, marginBottom: 8,
-    borderWidth: 1, borderColor: T.border,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: T.surface,
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: T.border,
   },
   rankLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   rankEmoji: { fontSize: 32 },
@@ -257,7 +319,14 @@ const s = StyleSheet.create({
   xpBarPct: { color: T.gold, fontSize: 11, fontWeight: '700', minWidth: 34, textAlign: 'right' },
 
   statsRow: { flexDirection: 'row', gap: 8, marginBottom: 20 },
-  chip: { flex: 1, backgroundColor: T.surface, borderRadius: 12, padding: 10, alignItems: 'center', borderWidth: 1 },
+  chip: {
+    flex: 1,
+    backgroundColor: T.surface,
+    borderRadius: 12,
+    padding: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+  },
   chipIcon: { fontSize: 18, marginBottom: 4 },
   chipValue: { fontSize: 13, fontWeight: '800', marginBottom: 2 },
   chipLabel: { color: T.sub, fontSize: 9, textAlign: 'center' },
@@ -271,8 +340,11 @@ const s = StyleSheet.create({
   connCheck: { position: 'absolute', color: T.gold, fontSize: 10, fontWeight: '800' },
 
   levelCard: {
-    backgroundColor: T.surface, borderRadius: 18, padding: 16,
-    borderWidth: 2, borderColor: T.border,
+    backgroundColor: T.surface,
+    borderRadius: 18,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: T.border,
   },
   levelCardPassed: { borderColor: T.gold + '88' },
   levelCardLocked: { opacity: 0.55 },
@@ -283,20 +355,35 @@ const s = StyleSheet.create({
 
   levelTop: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 10 },
   levelNumBadge: {
-    width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center', borderWidth: 1,
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
   },
   levelNum: { fontSize: 14, fontWeight: '900' },
   levelTitleWrap: { flex: 1 },
   levelTitle: { color: T.text, fontSize: 15, fontWeight: '700', marginBottom: 3 },
   levelSub: { fontSize: 12, fontWeight: '600' },
-  levelIconCircle: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
+  levelIconCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   levelIconEmoji: { fontSize: 24 },
 
   levelNarrative: { color: T.sub, fontSize: 12, lineHeight: 18, marginBottom: 8 },
 
   examBadge: {
-    backgroundColor: T.card, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5,
-    alignSelf: 'flex-start', marginBottom: 10,
+    backgroundColor: T.card,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    alignSelf: 'flex-start',
+    marginBottom: 10,
   },
   examBadgeText: { fontSize: 11, fontWeight: '600' },
 
@@ -313,8 +400,13 @@ const s = StyleSheet.create({
   xpReward: { fontSize: 13, fontWeight: '800' },
 
   certCard: {
-    backgroundColor: T.goldBg, borderRadius: 18, padding: 24, alignItems: 'center',
-    marginTop: 16, borderWidth: 2, borderColor: T.gold,
+    backgroundColor: T.goldBg,
+    borderRadius: 18,
+    padding: 24,
+    alignItems: 'center',
+    marginTop: 16,
+    borderWidth: 2,
+    borderColor: T.gold,
   },
   certEmoji: { fontSize: 52, marginBottom: 10 },
   certTitle: { color: T.gold, fontSize: 18, fontWeight: '800', marginBottom: 6 },

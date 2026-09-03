@@ -1,7 +1,13 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { T } from '../theme';
-import { LEVELS, getLevelProgress, getLevelCompletionPct, isLevelUnlocked, getTotalXP } from '../data/levels';
+import {
+  LEVELS,
+  getLevelProgress,
+  getLevelCompletionPct,
+  isLevelUnlocked,
+  getTotalXP,
+} from '../data/levels';
 
 const XP_RANKS = [
   { min: 0, label: 'Finance Rookie', emoji: '🌱', next: 300 },
@@ -22,19 +28,28 @@ function getRank(xp) {
 export default function ProgressScreen({ progress }) {
   const totalXP = getTotalXP(progress);
   const rank = getRank(totalXP);
-  const nextRank = XP_RANKS.find(r => r.min > totalXP);
+  const nextRank = XP_RANKS.find((r) => r.min > totalXP);
 
-  const passedLevels = LEVELS.filter(l => getLevelProgress(progress, l.id).gatePassed).length;
-  const totalLessons = LEVELS.flatMap(l => l.modules.flatMap(m => m.lessons)).length;
-  const doneLessons = LEVELS.reduce((acc, l) => acc + getLevelProgress(progress, l.id).lessonsCompleted.length, 0);
-  const doneInterviews = LEVELS.filter(l => getLevelProgress(progress, l.id).interviewCompleted).length;
+  const passedLevels = LEVELS.filter((l) => getLevelProgress(progress, l.id).gatePassed).length;
+  const totalLessons = LEVELS.flatMap((l) => l.modules.flatMap((m) => m.lessons)).length;
+  const doneLessons = LEVELS.reduce(
+    (acc, l) => acc + getLevelProgress(progress, l.id).lessonsCompleted.length,
+    0,
+  );
+  const doneInterviews = LEVELS.filter(
+    (l) => getLevelProgress(progress, l.id).interviewCompleted,
+  ).length;
 
   const xpPct = nextRank
     ? Math.round(((totalXP - rank.min) / (nextRank.min - rank.min)) * 100)
     : 100;
 
   return (
-    <ScrollView style={s.container} contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={s.container}
+      contentContainerStyle={s.content}
+      showsVerticalScrollIndicator={false}
+    >
       <Text style={s.title}>Прогресс</Text>
 
       {/* Rank card */}
@@ -58,7 +73,9 @@ export default function ProgressScreen({ progress }) {
               </View>
               <Text style={s.rankBarPct}>{xpPct}%</Text>
             </View>
-            <Text style={s.rankNext}>До «{nextRank.label}»: +{nextRank.min - totalXP} XP</Text>
+            <Text style={s.rankNext}>
+              До «{nextRank.label}»: +{nextRank.min - totalXP} XP
+            </Text>
           </>
         )}
       </View>
@@ -72,15 +89,22 @@ export default function ProgressScreen({ progress }) {
 
       {/* Per-level progress */}
       <Text style={s.sectionTitle}>По уровням</Text>
-      {LEVELS.map(level => {
+      {LEVELS.map((level) => {
         const lp = getLevelProgress(progress, level.id);
         const pct = getLevelCompletionPct(progress, level.id);
         const unlocked = isLevelUnlocked(progress, level.id);
-        const allLessons = level.modules.flatMap(m => m.lessons);
+        const allLessons = level.modules.flatMap((m) => m.lessons);
         const doneLvl = lp.lessonsCompleted.length;
 
         return (
-          <View key={level.id} style={[s.levelCard, { borderLeftColor: level.color, borderLeftWidth: 4 }, !unlocked && s.levelCardLocked]}>
+          <View
+            key={level.id}
+            style={[
+              s.levelCard,
+              { borderLeftColor: level.color, borderLeftWidth: 4 },
+              !unlocked && s.levelCardLocked,
+            ]}
+          >
             {/* Header */}
             <View style={s.levelHeader}>
               <View style={[s.levelIconBox, { backgroundColor: level.colorBg }]}>
@@ -88,7 +112,9 @@ export default function ProgressScreen({ progress }) {
               </View>
               <View style={s.levelMeta}>
                 <Text style={s.levelNum}>Уровень {level.num}</Text>
-                <Text style={s.levelTitle} numberOfLines={1}>{level.title}</Text>
+                <Text style={s.levelTitle} numberOfLines={1}>
+                  {level.title}
+                </Text>
               </View>
               <Text style={[s.levelPct, { color: unlocked ? level.color : T.faint }]}>
                 {unlocked ? `${pct}%` : '🔒'}
@@ -98,7 +124,9 @@ export default function ProgressScreen({ progress }) {
             {/* Progress bar */}
             {unlocked && (
               <View style={s.levelBar}>
-                <View style={[s.levelBarFill, { width: `${pct}%`, backgroundColor: level.color }]} />
+                <View
+                  style={[s.levelBarFill, { width: `${pct}%`, backgroundColor: level.color }]}
+                />
               </View>
             )}
 
@@ -122,35 +150,34 @@ export default function ProgressScreen({ progress }) {
                 label="Gate"
                 color={lp.gatePassed ? T.green : lp.gateScore ? T.red : T.sub}
               />
-              <LevelStat
-                icon="⚡"
-                value={`${lp.xp || 0}`}
-                label="XP"
-                color={T.gold}
-              />
+              <LevelStat icon="⚡" value={`${lp.xp || 0}`} label="XP" color={T.gold} />
             </View>
 
             {/* Status badge */}
             {unlocked && (
-              <View style={[
-                s.statusBadge,
-                lp.gatePassed
-                  ? { backgroundColor: T.greenBg, borderColor: T.green }
-                  : pct > 0
-                  ? { backgroundColor: level.colorBg, borderColor: level.color }
-                  : { backgroundColor: T.card, borderColor: T.border },
-              ]}>
-                <Text style={[
-                  s.statusText,
-                  { color: lp.gatePassed ? T.green : pct > 0 ? level.color : T.sub },
-                ]}>
+              <View
+                style={[
+                  s.statusBadge,
+                  lp.gatePassed
+                    ? { backgroundColor: T.greenBg, borderColor: T.green }
+                    : pct > 0
+                      ? { backgroundColor: level.colorBg, borderColor: level.color }
+                      : { backgroundColor: T.card, borderColor: T.border },
+                ]}
+              >
+                <Text
+                  style={[
+                    s.statusText,
+                    { color: lp.gatePassed ? T.green : pct > 0 ? level.color : T.sub },
+                  ]}
+                >
                   {lp.gatePassed
                     ? '✅ Уровень пройден'
                     : pct === 100 && lp.interviewCompleted
-                    ? '🚀 Готов к Gate-экзамену'
-                    : pct > 0
-                    ? '📖 В процессе'
-                    : '▶ Не начат'}
+                      ? '🚀 Готов к Gate-экзамену'
+                      : pct > 0
+                        ? '📖 В процессе'
+                        : '▶ Не начат'}
                 </Text>
               </View>
             )}
@@ -158,16 +185,29 @@ export default function ProgressScreen({ progress }) {
             {/* Module breakdown */}
             {unlocked && pct > 0 && (
               <View style={s.modulesBreakdown}>
-                {level.modules.map(module => {
-                  const moduleDone = module.lessons.filter(l => lp.lessonsCompleted.includes(l.id)).length;
-                  const modulePct = module.lessons.length ? Math.round((moduleDone / module.lessons.length) * 100) : 0;
+                {level.modules.map((module) => {
+                  const moduleDone = module.lessons.filter((l) =>
+                    lp.lessonsCompleted.includes(l.id),
+                  ).length;
+                  const modulePct = module.lessons.length
+                    ? Math.round((moduleDone / module.lessons.length) * 100)
+                    : 0;
                   return (
                     <View key={module.id} style={s.moduleRow}>
-                      <Text style={s.moduleName} numberOfLines={1}>{module.title}</Text>
+                      <Text style={s.moduleName} numberOfLines={1}>
+                        {module.title}
+                      </Text>
                       <View style={s.moduleMiniBar}>
-                        <View style={[s.moduleMiniBarFill, { width: `${modulePct}%`, backgroundColor: level.color }]} />
+                        <View
+                          style={[
+                            s.moduleMiniBarFill,
+                            { width: `${modulePct}%`, backgroundColor: level.color },
+                          ]}
+                        />
                       </View>
-                      <Text style={[s.modulePct, { color: modulePct === 100 ? T.green : level.color }]}>
+                      <Text
+                        style={[s.modulePct, { color: modulePct === 100 ? T.green : level.color }]}
+                      >
                         {moduleDone}/{module.lessons.length}
                       </Text>
                     </View>
@@ -239,15 +279,27 @@ const s = StyleSheet.create({
   title: { color: T.text, fontSize: 24, fontWeight: '800', marginBottom: 16 },
 
   rankCard: {
-    backgroundColor: T.surface, borderRadius: 18, padding: 16,
-    marginBottom: 14, borderWidth: 1, borderColor: T.border,
+    backgroundColor: T.surface,
+    borderRadius: 18,
+    padding: 16,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: T.border,
   },
   rankRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 },
   rankEmoji: { fontSize: 36 },
   rankInfo: { flex: 1 },
   rankLabel: { color: T.sub, fontSize: 11 },
   rankName: { color: T.text, fontSize: 17, fontWeight: '800' },
-  xpBlock: { alignItems: 'center', backgroundColor: T.goldBg, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 6, borderWidth: 1, borderColor: T.gold },
+  xpBlock: {
+    alignItems: 'center',
+    backgroundColor: T.goldBg,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: T.gold,
+  },
   xpNum: { color: T.gold, fontSize: 20, fontWeight: '900' },
   xpLabel: { color: T.gold, fontSize: 9, fontWeight: '700' },
   rankBarWrap: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
@@ -258,8 +310,13 @@ const s = StyleSheet.create({
 
   statsRow: { flexDirection: 'row', gap: 8, marginBottom: 20 },
   statBox: {
-    flex: 1, backgroundColor: T.surface, borderRadius: 14, padding: 12,
-    alignItems: 'center', borderWidth: 1, borderColor: T.border,
+    flex: 1,
+    backgroundColor: T.surface,
+    borderRadius: 14,
+    padding: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: T.border,
   },
   statIcon: { fontSize: 22, marginBottom: 4 },
   statValue: { fontSize: 15, fontWeight: '800', marginBottom: 2 },
@@ -268,18 +325,34 @@ const s = StyleSheet.create({
   sectionTitle: { color: T.text, fontSize: 17, fontWeight: '700', marginBottom: 12 },
 
   levelCard: {
-    backgroundColor: T.surface, borderRadius: 16, padding: 14,
-    marginBottom: 12, borderWidth: 1, borderColor: T.border,
+    backgroundColor: T.surface,
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: T.border,
   },
   levelCardLocked: { opacity: 0.5 },
   levelHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 8 },
-  levelIconBox: { width: 40, height: 40, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
+  levelIconBox: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   levelIconText: { fontSize: 20 },
   levelMeta: { flex: 1 },
   levelNum: { color: T.faint, fontSize: 10, fontWeight: '700' },
   levelTitle: { color: T.text, fontSize: 13, fontWeight: '700' },
   levelPct: { fontSize: 16, fontWeight: '800' },
-  levelBar: { height: 5, backgroundColor: T.border, borderRadius: 3, overflow: 'hidden', marginBottom: 10 },
+  levelBar: {
+    height: 5,
+    backgroundColor: T.border,
+    borderRadius: 3,
+    overflow: 'hidden',
+    marginBottom: 10,
+  },
   levelBarFill: { height: '100%', borderRadius: 3 },
 
   levelStats: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10 },
@@ -288,27 +361,48 @@ const s = StyleSheet.create({
   levelStatValue: { fontSize: 13, fontWeight: '800', marginBottom: 1 },
   levelStatLabel: { color: T.sub, fontSize: 9 },
 
-  statusBadge: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, alignSelf: 'flex-start', marginBottom: 10 },
+  statusBadge: {
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 1,
+    alignSelf: 'flex-start',
+    marginBottom: 10,
+  },
   statusText: { fontSize: 11, fontWeight: '700' },
 
   modulesBreakdown: { gap: 5, paddingTop: 6, borderTopWidth: 1, borderTopColor: T.border },
   moduleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   moduleName: { color: T.sub, fontSize: 10, flex: 1 },
-  moduleMiniBar: { width: 60, height: 3, backgroundColor: T.border, borderRadius: 2, overflow: 'hidden' },
+  moduleMiniBar: {
+    width: 60,
+    height: 3,
+    backgroundColor: T.border,
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
   moduleMiniBarFill: { height: '100%', borderRadius: 2 },
   modulePct: { fontSize: 10, fontWeight: '700', minWidth: 28, textAlign: 'right' },
 
   lockText: { color: T.faint, fontSize: 11, fontStyle: 'italic', marginTop: 4 },
 
   examCard: {
-    backgroundColor: T.card, borderRadius: 16, padding: 16,
-    marginTop: 8, borderWidth: 1, borderColor: T.border,
+    backgroundColor: T.card,
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: T.border,
   },
   examCardTitle: { color: T.text, fontSize: 14, fontWeight: '700', marginBottom: 12 },
   examRow: { flexDirection: 'row', gap: 8 },
   examItem: {
-    flex: 1, backgroundColor: T.surface, borderRadius: 10, padding: 10,
-    alignItems: 'center', borderWidth: 1,
+    flex: 1,
+    backgroundColor: T.surface,
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+    borderWidth: 1,
   },
   examItemName: { color: T.text, fontSize: 12, fontWeight: '700', marginBottom: 4 },
   examItemStatus: { fontSize: 10, textAlign: 'center', lineHeight: 15 },

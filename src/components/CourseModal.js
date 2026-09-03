@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { T } from '../theme';
 import { getCourseLessons, getCourseProgress } from '../data/courses';
 import LessonModal from './LessonModal';
@@ -53,14 +51,19 @@ export default function CourseModal({ course, progress, onClose, onProgressUpdat
             <View style={s.bar}>
               <View style={[s.barFill, { width: `${pct}%`, backgroundColor: course.color }]} />
             </View>
-            <Text style={s.progressSub}>{p.lessons.length} из {lessons.length} уроков пройдено</Text>
+            <Text style={s.progressSub}>
+              {p.lessons.length} из {lessons.length} уроков пройдено
+            </Text>
           </View>
 
           {/* Action buttons */}
           <View style={s.actions}>
             <TouchableOpacity
               style={[s.actionBtn, { backgroundColor: T.blueBg, borderColor: T.blue }]}
-              onPress={() => { onClose(); onPractice && onPractice(course); }}
+              onPress={() => {
+                onClose();
+                onPractice && onPractice(course);
+              }}
             >
               <Text style={s.actionIcon}>🧮</Text>
               <Text style={[s.actionText, { color: T.blue }]}>Практические задачи</Text>
@@ -94,13 +97,13 @@ export default function CourseModal({ course, progress, onClose, onProgressUpdat
 
           {/* Modules */}
           <Text style={s.modulesTitle}>Программа курса</Text>
-          {course.modules.map(mod => (
+          {course.modules.map((mod) => (
             <View key={mod.id} style={s.module}>
               <View style={s.modHeader}>
                 <Text style={s.modIcon}>{mod.icon}</Text>
                 <Text style={s.modTitle}>{mod.title}</Text>
               </View>
-              {mod.lessons.map(lesson => {
+              {mod.lessons.map((lesson) => {
                 const done = p.lessons.includes(lesson.id);
                 return (
                   <TouchableOpacity
@@ -109,7 +112,12 @@ export default function CourseModal({ course, progress, onClose, onProgressUpdat
                     onPress={() => openLesson(lesson)}
                     activeOpacity={0.7}
                   >
-                    <View style={[s.lessonCheck, done && { backgroundColor: T.green, borderColor: T.green }]}>
+                    <View
+                      style={[
+                        s.lessonCheck,
+                        done && { backgroundColor: T.green, borderColor: T.green },
+                      ]}
+                    >
                       {done && <Text style={s.checkMark}>✓</Text>}
                     </View>
                     <View style={s.lessonInfo}>
@@ -162,13 +170,23 @@ export default function CourseModal({ course, progress, onClose, onProgressUpdat
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: T.bg },
   header: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingTop: 52, paddingHorizontal: 16, paddingBottom: 16,
-    borderBottomWidth: 1, gap: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 52,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    gap: 12,
   },
   backBtn: { paddingRight: 4 },
   backText: { color: T.gold, fontSize: 17 },
-  iconWrap: { width: 46, height: 46, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  iconWrap: {
+    width: 46,
+    height: 46,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   icon: { fontSize: 24 },
   title: { color: T.text, fontSize: 15, fontWeight: '700' },
   meta: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 },
@@ -177,20 +195,33 @@ const s = StyleSheet.create({
   hours: { color: T.sub, fontSize: 12 },
   content: { padding: 20 },
   progressCard: {
-    backgroundColor: T.surface, borderRadius: 14,
-    padding: 16, marginBottom: 16,
-    borderWidth: 1, borderColor: T.border,
+    backgroundColor: T.surface,
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: T.border,
   },
   progressTop: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
   progressLabel: { color: T.sub, fontSize: 13 },
   progressPct: { fontSize: 16, fontWeight: '700' },
-  bar: { height: 6, backgroundColor: T.border, borderRadius: 3, marginBottom: 8, overflow: 'hidden' },
+  bar: {
+    height: 6,
+    backgroundColor: T.border,
+    borderRadius: 3,
+    marginBottom: 8,
+    overflow: 'hidden',
+  },
   barFill: { height: '100%', borderRadius: 3 },
   progressSub: { color: T.sub, fontSize: 12 },
   actions: { gap: 10, marginBottom: 24 },
   actionBtn: {
-    padding: 16, borderRadius: 14,
-    borderWidth: 1, flexDirection: 'row', alignItems: 'center', gap: 12,
+    padding: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
   actionIcon: { fontSize: 24 },
   actionText: { fontSize: 14, fontWeight: '600' },
@@ -204,16 +235,25 @@ const s = StyleSheet.create({
   modIcon: { fontSize: 18 },
   modTitle: { color: T.text, fontSize: 14, fontWeight: '600' },
   lessonRow: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: T.surface, borderRadius: 12,
-    padding: 14, marginBottom: 8,
-    borderWidth: 1, borderColor: T.border, gap: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: T.surface,
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: T.border,
+    gap: 12,
   },
   lessonDone: { borderColor: T.border, opacity: 0.8 },
   lessonCheck: {
-    width: 24, height: 24, borderRadius: 12,
-    borderWidth: 2, borderColor: T.border,
-    alignItems: 'center', justifyContent: 'center',
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: T.border,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   checkMark: { color: '#fff', fontSize: 12, fontWeight: '700' },
   lessonInfo: { flex: 1 },

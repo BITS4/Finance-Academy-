@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View, Text, ScrollView, TouchableOpacity, StyleSheet,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { T } from '../theme';
 import { DIAGNOSTIC, determineLevel } from '../data/diagnostic';
 import { saveDiagnosticAnswers } from '../storage';
@@ -14,7 +12,7 @@ export default function DiagnosticScreen({ onComplete }) {
   const [phase, setPhase] = useState('intro'); // intro | quiz | result
 
   const q = DIAGNOSTIC[cur];
-  const progress = ((cur) / DIAGNOSTIC.length) * 100;
+  const progress = (cur / DIAGNOSTIC.length) * 100;
 
   function confirm() {
     if (selected === null) return;
@@ -22,11 +20,14 @@ export default function DiagnosticScreen({ onComplete }) {
   }
 
   function goNext() {
-    const newAnswers = [...answers, {
-      questionId: q.id,
-      selectedIndex: selected,
-      isCorrect: selected === q.correct,
-    }];
+    const newAnswers = [
+      ...answers,
+      {
+        questionId: q.id,
+        selectedIndex: selected,
+        isCorrect: selected === q.correct,
+      },
+    ];
     setAnswers(newAnswers);
     setSelected(null);
     setConfirmed(false);
@@ -35,7 +36,7 @@ export default function DiagnosticScreen({ onComplete }) {
       setCur(cur + 1);
     } else {
       const level = determineLevel(newAnswers);
-      const score = newAnswers.filter(a => a.isCorrect).length;
+      const score = newAnswers.filter((a) => a.isCorrect).length;
       setPhase('result');
       saveDiagnosticAnswers(newAnswers);
       setTimeout(() => onComplete(level, score, newAnswers), 100);
@@ -60,7 +61,8 @@ export default function DiagnosticScreen({ onComplete }) {
         <Text style={s.introEmoji}>🎯</Text>
         <Text style={s.introTitle}>Диагностика уровня</Text>
         <Text style={s.introDesc}>
-          Ответьте на {DIAGNOSTIC.length} вопросов — мы определим ваш уровень и составим персональный план обучения.
+          Ответьте на {DIAGNOSTIC.length} вопросов — мы определим ваш уровень и составим
+          персональный план обучения.
         </Text>
         <View style={s.introTips}>
           <Tip icon="🧮" text="Есть расчётные задачи — держите калькулятор" />
@@ -75,19 +77,29 @@ export default function DiagnosticScreen({ onComplete }) {
   }
 
   return (
-    <ScrollView style={s.container} contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={s.container}
+      contentContainerStyle={s.content}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Progress */}
       <View style={s.progressWrap}>
         <View style={s.progressBar}>
           <View style={[s.progressFill, { width: `${progress}%` }]} />
         </View>
-        <Text style={s.progressText}>{cur + 1} / {DIAGNOSTIC.length}</Text>
+        <Text style={s.progressText}>
+          {cur + 1} / {DIAGNOSTIC.length}
+        </Text>
       </View>
 
       {/* Type badge */}
       <View style={[s.typeBadge, q.type === 'calc' ? s.typeBadgeCalc : s.typeBadgeChoice]}>
         <Text style={s.typeBadgeText}>
-          {q.type === 'calc' ? '🧮 Расчётная задача' : q.type === 'entry' ? '📝 Составить проводку' : '💬 Выбор ответа'}
+          {q.type === 'calc'
+            ? '🧮 Расчётная задача'
+            : q.type === 'entry'
+              ? '📝 Составить проводку'
+              : '💬 Выбор ответа'}
         </Text>
       </View>
 
@@ -107,8 +119,13 @@ export default function DiagnosticScreen({ onComplete }) {
           let style = s.option;
           let textStyle = s.optText;
           if (confirmed) {
-            if (i === q.correct) { style = [s.option, s.optCorrect]; textStyle = [s.optText, s.optTextCorrect]; }
-            else if (i === selected && i !== q.correct) { style = [s.option, s.optWrong]; textStyle = [s.optText, s.optTextWrong]; }
+            if (i === q.correct) {
+              style = [s.option, s.optCorrect];
+              textStyle = [s.optText, s.optTextCorrect];
+            } else if (i === selected && i !== q.correct) {
+              style = [s.option, s.optWrong];
+              textStyle = [s.optText, s.optTextWrong];
+            }
           } else if (selected === i) {
             style = [s.option, s.optSelected];
           }
@@ -121,7 +138,14 @@ export default function DiagnosticScreen({ onComplete }) {
               disabled={confirmed}
               activeOpacity={0.7}
             >
-              <View style={[s.optLetter, confirmed && i === q.correct && s.optLetterCorrect, confirmed && i === selected && i !== q.correct && s.optLetterWrong, !confirmed && selected === i && s.optLetterSelected]}>
+              <View
+                style={[
+                  s.optLetter,
+                  confirmed && i === q.correct && s.optLetterCorrect,
+                  confirmed && i === selected && i !== q.correct && s.optLetterWrong,
+                  !confirmed && selected === i && s.optLetterSelected,
+                ]}
+              >
                 <Text style={s.optLetterText}>{['А', 'Б', 'В', 'Г'][i]}</Text>
               </View>
               <Text style={textStyle}>{opt}</Text>
@@ -132,8 +156,26 @@ export default function DiagnosticScreen({ onComplete }) {
 
       {/* Feedback */}
       {feedback && (
-        <View style={[s.feedback, feedback.type === 'correct' ? s.feedbackCorrect : feedback.type === 'almost' ? s.feedbackAlmost : s.feedbackWrong]}>
-          <Text style={[s.feedbackText, feedback.type === 'correct' ? { color: T.green } : feedback.type === 'almost' ? { color: T.gold } : { color: T.red }]}>
+        <View
+          style={[
+            s.feedback,
+            feedback.type === 'correct'
+              ? s.feedbackCorrect
+              : feedback.type === 'almost'
+                ? s.feedbackAlmost
+                : s.feedbackWrong,
+          ]}
+        >
+          <Text
+            style={[
+              s.feedbackText,
+              feedback.type === 'correct'
+                ? { color: T.green }
+                : feedback.type === 'almost'
+                  ? { color: T.gold }
+                  : { color: T.red },
+            ]}
+          >
             {feedback.msg}
           </Text>
         </View>
@@ -174,39 +216,97 @@ const s = StyleSheet.create({
   content: { padding: 20 },
 
   // Intro
-  intro: { flex: 1, backgroundColor: T.bg, padding: 24, justifyContent: 'center', alignItems: 'center' },
+  intro: {
+    flex: 1,
+    backgroundColor: T.bg,
+    padding: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   introEmoji: { fontSize: 72, marginBottom: 20 },
-  introTitle: { color: T.text, fontSize: 28, fontWeight: '700', marginBottom: 12, textAlign: 'center' },
+  introTitle: {
+    color: T.text,
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
   introDesc: { color: T.sub, fontSize: 15, lineHeight: 24, textAlign: 'center', marginBottom: 32 },
   introTips: { width: '100%', gap: 12, marginBottom: 36 },
-  tip: { flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: T.surface, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: T.border },
+  tip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    backgroundColor: T.surface,
+    padding: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: T.border,
+  },
   tipIcon: { fontSize: 24 },
   tipText: { color: T.sub, fontSize: 14, flex: 1 },
-  startBtn: { backgroundColor: T.gold, borderRadius: 16, padding: 18, width: '100%', alignItems: 'center' },
+  startBtn: {
+    backgroundColor: T.gold,
+    borderRadius: 16,
+    padding: 18,
+    width: '100%',
+    alignItems: 'center',
+  },
   startBtnText: { color: '#000', fontSize: 17, fontWeight: '700' },
 
   // Quiz
   progressWrap: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 16 },
-  progressBar: { flex: 1, height: 6, backgroundColor: T.border, borderRadius: 3, overflow: 'hidden' },
+  progressBar: {
+    flex: 1,
+    height: 6,
+    backgroundColor: T.border,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
   progressFill: { height: '100%', backgroundColor: T.gold, borderRadius: 3 },
   progressText: { color: T.sub, fontSize: 13, width: 40 },
-  typeBadge: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 12 },
+  typeBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+    marginBottom: 12,
+  },
   typeBadgeCalc: { backgroundColor: T.blueBg },
   typeBadgeChoice: { backgroundColor: T.goldBg },
   typeBadgeText: { fontSize: 12, fontWeight: '600', color: T.blue },
-  formulaHint: { backgroundColor: T.card, borderRadius: 10, padding: 12, marginBottom: 14, borderLeftWidth: 3, borderLeftColor: T.gold },
+  formulaHint: {
+    backgroundColor: T.card,
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 14,
+    borderLeftWidth: 3,
+    borderLeftColor: T.gold,
+  },
   formulaText: { color: T.gold, fontSize: 13, fontFamily: 'monospace' },
   question: { color: T.text, fontSize: 17, fontWeight: '600', lineHeight: 28, marginBottom: 24 },
   options: { gap: 10, marginBottom: 20 },
   option: {
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    backgroundColor: T.surface, borderRadius: 14, padding: 16,
-    borderWidth: 1, borderColor: T.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: T.surface,
+    borderRadius: 14,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: T.border,
   },
   optSelected: { borderColor: T.gold, backgroundColor: T.goldBg },
   optCorrect: { borderColor: T.green, backgroundColor: T.greenBg },
   optWrong: { borderColor: T.red, backgroundColor: T.redBg },
-  optLetter: { width: 34, height: 34, borderRadius: 8, backgroundColor: T.card, alignItems: 'center', justifyContent: 'center' },
+  optLetter: {
+    width: 34,
+    height: 34,
+    borderRadius: 8,
+    backgroundColor: T.card,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   optLetterSelected: { backgroundColor: T.gold },
   optLetterCorrect: { backgroundColor: T.green },
   optLetterWrong: { backgroundColor: T.red },
