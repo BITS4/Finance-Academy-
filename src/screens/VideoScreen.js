@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import {
-  View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal, Image, Dimensions,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  Image,
+  Dimensions,
 } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { T } from '../theme';
@@ -24,8 +31,13 @@ export default function VideoScreen() {
       </View>
 
       <ScrollView contentContainerStyle={s.list} showsVerticalScrollIndicator={false}>
-        {VIDEOS.map(v => (
-          <TouchableOpacity key={v.id} style={s.card} onPress={() => setPlaying(v)} activeOpacity={0.75}>
+        {VIDEOS.map((v) => (
+          <TouchableOpacity
+            key={v.id}
+            style={s.card}
+            onPress={() => setPlaying(v)}
+            activeOpacity={0.75}
+          >
             <View style={s.thumbWrap}>
               <Image
                 source={{ uri: `https://img.youtube.com/vi/${v.videoId}/hqdefault.jpg` }}
@@ -43,7 +55,9 @@ export default function VideoScreen() {
               </View>
             </View>
             <View style={s.info}>
-              <Text style={s.videoTitle} numberOfLines={2}>{v.title}</Text>
+              <Text style={s.videoTitle} numberOfLines={2}>
+                {v.title}
+              </Text>
               <Text style={s.channel}>{v.channel}</Text>
             </View>
           </TouchableOpacity>
@@ -54,7 +68,9 @@ export default function VideoScreen() {
       <Modal visible={!!playing} animationType="slide" onRequestClose={closePlayer}>
         <View style={s.modal}>
           <View style={s.modalHeader}>
-            <Text style={s.modalTitle} numberOfLines={1}>{playing?.title}</Text>
+            <Text style={s.modalTitle} numberOfLines={1}>
+              {playing?.title}
+            </Text>
             <TouchableOpacity onPress={closePlayer} style={s.closeBtn}>
               <Text style={s.closeText}>✕</Text>
             </TouchableOpacity>
@@ -77,7 +93,9 @@ export default function VideoScreen() {
 
           <View style={s.modalInfo}>
             <Text style={s.modalVideoTitle}>{playing?.title}</Text>
-            <Text style={s.modalChannel}>{playing?.channel} · {playing?.duration}</Text>
+            <Text style={s.modalChannel}>
+              {playing?.channel} · {playing?.duration}
+            </Text>
           </View>
         </View>
       </Modal>
@@ -92,28 +110,47 @@ const s = StyleSheet.create({
   sub: { color: T.sub, fontSize: 13 },
   list: { padding: 20, gap: 16 },
   card: {
-    backgroundColor: T.surface, borderRadius: 16,
-    overflow: 'hidden', borderWidth: 1, borderColor: T.border,
+    backgroundColor: T.surface,
+    borderRadius: 16,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: T.border,
   },
   thumbWrap: { height: 180, backgroundColor: T.card, position: 'relative' },
   thumb: { width: '100%', height: '100%' },
   playBtn: {
-    position: 'absolute', top: '50%', left: '50%',
-    marginTop: -28, marginLeft: -28,
-    width: 56, height: 56, borderRadius: 28,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -28,
+    marginLeft: -28,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: 'rgba(0,0,0,0.65)',
-    alignItems: 'center', justifyContent: 'center',
-    borderWidth: 2, borderColor: 'rgba(255,255,255,0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.4)',
   },
   playIcon: { color: '#fff', fontSize: 20, marginLeft: 3 },
   tagBadge: {
-    position: 'absolute', top: 12, left: 12,
-    paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8,
+    position: 'absolute',
+    top: 12,
+    left: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
   },
   tagText: { fontSize: 11, fontWeight: '600' },
   durationBadge: {
-    position: 'absolute', bottom: 12, right: 12,
-    backgroundColor: 'rgba(0,0,0,0.75)', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6,
+    position: 'absolute',
+    bottom: 12,
+    right: 12,
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
   },
   durationText: { color: '#fff', fontSize: 11, fontWeight: '600' },
   info: { padding: 14 },
@@ -121,9 +158,12 @@ const s = StyleSheet.create({
   channel: { color: T.sub, fontSize: 12 },
   modal: { flex: 1, backgroundColor: T.bg },
   modalHeader: {
-    flexDirection: 'row', alignItems: 'center',
-    padding: 16, paddingTop: 52,
-    borderBottomWidth: 1, borderColor: T.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    paddingTop: 52,
+    borderBottomWidth: 1,
+    borderColor: T.border,
   },
   modalTitle: { flex: 1, color: T.text, fontSize: 16, fontWeight: '600' },
   closeBtn: { padding: 8 },

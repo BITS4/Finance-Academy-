@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, StatusBar, Modal, Platform } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as NavigationBar from 'expo-navigation-bar';
 
 import { T } from './src/theme';
@@ -29,14 +28,13 @@ import LevelGateModal from './src/components/LevelGateModal';
 import InterviewPrepScreen from './src/screens/InterviewPrepScreen';
 
 const Tab = createBottomTabNavigator();
-const LEVEL_KEY = 'fa-user-level';
 
 function TabIcon({ label, focused }) {
   const icons = {
-    'Путь': '🗺️',
-    'Интервью': '🎤',
-    'Библиотека': '🎬',
-    'Прогресс': '📊',
+    Путь: '🗺️',
+    Интервью: '🎤',
+    Библиотека: '🎬',
+    Прогресс: '📊',
   };
   return (
     <View style={[st.tabIcon, focused && st.tabIconActive]}>
@@ -46,24 +44,15 @@ function TabIcon({ label, focused }) {
   );
 }
 
-function TabBarWithInsets({ children, style }) {
-  const insets = useSafeAreaInsets();
-  return (
-    <View style={[style, { paddingBottom: Math.max(insets.bottom, 0), height: 64 + Math.max(insets.bottom, 0) }]}>
-      {children}
-    </View>
-  );
-}
-
 export default function App() {
   const [appReady, setAppReady] = useState(false);
   const [progress, setProgress] = useState({});
 
   // Modal state
-  const [selectedLevel, setSelectedLevel] = useState(null);   // LevelDetailModal
-  const [activeLesson, setActiveLesson] = useState(null);     // LessonCoreModal {lesson, level}
+  const [selectedLevel, setSelectedLevel] = useState(null); // LevelDetailModal
+  const [activeLesson, setActiveLesson] = useState(null); // LessonCoreModal {lesson, level}
   const [interviewLevel, setInterviewLevel] = useState(null); // InterviewModal
-  const [gateLevel, setGateLevel] = useState(null);           // LevelGateModal
+  const [gateLevel, setGateLevel] = useState(null); // LevelGateModal
 
   useEffect(() => {
     async function init() {
@@ -73,7 +62,9 @@ export default function App() {
           await NavigationBar.setBehaviorAsync('overlay-swipe');
           await NavigationBar.setPositionAsync('absolute');
           await NavigationBar.setBackgroundColorAsync('#00000000');
-        } catch {}
+        } catch {
+          // Navigation-bar controls are best-effort on vendor-specific Android builds.
+        }
       }
       const prog = await loadProgress();
       setProgress(prog);
@@ -131,10 +122,7 @@ export default function App() {
         >
           <Tab.Screen name="Путь">
             {() => (
-              <HomeScreen
-                progress={progress}
-                onLevelPress={(level) => setSelectedLevel(level)}
-              />
+              <HomeScreen progress={progress} onLevelPress={(level) => setSelectedLevel(level)} />
             )}
           </Tab.Screen>
 
@@ -200,12 +188,19 @@ export default function App() {
 
 const st = StyleSheet.create({
   splash: {
-    flex: 1, backgroundColor: T.bg, alignItems: 'center', justifyContent: 'center',
+    flex: 1,
+    backgroundColor: T.bg,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   splashEmoji: { fontSize: 72, marginBottom: 16 },
   splashTitle: {
-    color: T.text, fontSize: 36, fontWeight: '900', textAlign: 'center',
-    lineHeight: 42, letterSpacing: 1,
+    color: T.text,
+    fontSize: 36,
+    fontWeight: '900',
+    textAlign: 'center',
+    lineHeight: 42,
+    letterSpacing: 1,
   },
   splashSub: { color: T.gold, fontSize: 14, marginTop: 10, fontWeight: '600' },
 
@@ -218,8 +213,11 @@ const st = StyleSheet.create({
     elevation: 0,
   },
   tabIcon: {
-    alignItems: 'center', justifyContent: 'center',
-    paddingTop: 6, paddingHorizontal: 14, borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 6,
+    paddingHorizontal: 14,
+    borderRadius: 12,
   },
   tabIconActive: { backgroundColor: T.goldBg },
   tabEmoji: { fontSize: 22, marginBottom: 2 },
