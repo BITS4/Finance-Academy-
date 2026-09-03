@@ -1,0 +1,21 @@
+services:
+  api:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      PORT: 8787
+      LOG_LEVEL: info
+      ALLOWED_ORIGINS: http://localhost:8081,http://localhost:19006
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-sonnet-4-20250514}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+    ports:
+      - '8787:8787'
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:8787/health']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
