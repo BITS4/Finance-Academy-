@@ -1,0 +1,25 @@
+name: Feature request
+description: Propose a focused learning or platform improvement
+title: 'feat: '
+labels: [enhancement]
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Learner outcome
+      description: Which user problem or measurable learning outcome should improve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Acceptance tests
+      description: List the behavior that automated tests should prove.
+    validations:
+      required: true
